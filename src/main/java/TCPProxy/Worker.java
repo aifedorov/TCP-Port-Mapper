@@ -52,7 +52,7 @@ public class Worker implements Runnable {
     @Override
     public void run() {
             try {
-                while (!Thread.interrupted()) {
+                while (true) {
 
                     this.selector.select();
                     Iterator selectedKeys = this.selector.selectedKeys().iterator();
@@ -71,10 +71,7 @@ public class Worker implements Runnable {
 
                             //определяем для него селектор
                             this.connector.register( this.selector);
-
-                            //закрываем канал, так как больше нам не нужен, далее работаем с его копией в коннекторе
-                            this.serverChannel.close();
-                    }
+                        }
 
                     if (key.isValid() && key.isReadable() || key.isValid() && key.isWritable()){
                           this.connector.process(key);

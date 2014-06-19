@@ -46,7 +46,6 @@ public class Main {
         final List<ProxyConfig> configs = ConfigParser.parse(propertiesProxy);
         for (final ProxyConfig config : configs){
             try {
-
                 new Thread(new Worker(config)).start();
                 LOGGER.log(Level.INFO, "Сервер успешно запущен на порте: " + config.getLocalPort());
 

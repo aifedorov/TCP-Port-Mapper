@@ -98,8 +98,8 @@ public class Connector {
             }
         } catch (ClosedChannelException exception) {
 
-            if (LOGGER.isLoggable(Level.INFO))
-                LOGGER.log(Level.INFO, "Канал на клиенте или на сервере закрыт.", exception);
+            closeChannel(this.clientChannel);
+            closeChannel(this.serverChannel);
 
         } catch (IOException exception) {
 
@@ -121,5 +121,4 @@ public class Connector {
             }
         }
     }
-
 }
