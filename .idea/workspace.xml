@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b717704a-3cca-49db-a8b1-4b37f5964dea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/TCPProxy/Acceptor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/TCPProxy/Server.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/TCPProxy/Main.java" afterPath="$PROJECT_DIR$/src/main/java/TCPProxy/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/TCPProxy/ProxyConfig.java" afterPath="$PROJECT_DIR$/src/main/java/TCPProxy/ProxyConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/TCPProxy/Worker.java" afterPath="$PROJECT_DIR$/src/main/java/TCPProxy/Worker.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proxy.properties" afterPath="$PROJECT_DIR$/proxy.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TCPPortMapper.iws" />
@@ -112,9 +106,6 @@
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
-  </component>
-  <component name="Git.Push.Settings">
-    <option name="myUpdateMethod" value="REBASE" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -605,7 +596,7 @@
       <workItem from="1403186718926" duration="1016000" />
       <workItem from="1403195671438" duration="2602000" />
       <workItem from="1403201196936" duration="6628000" />
-      <workItem from="1403253627362" duration="2408000" />
+      <workItem from="1403253627362" duration="2516000" />
     </task>
     <task id="LOCAL-00001" summary="version 1.0,  bugs with connection few clients and sometimes  throw exception">
       <created>1403173229604</created>
@@ -627,11 +618,15 @@
       <created>1403182957680</created>
       <updated>1403182957680</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="problem with pool threads">
+      <created>1403264967927</created>
+      <updated>1403264967927</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92446000" />
+    <option name="totallyTimeSpent" value="92554000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -680,7 +675,8 @@
     </option>
     <MESSAGE value="version 1.0,  bugs with connection few clients and sometimes  throw exception" />
     <MESSAGE value="fix  bugs with connection few clients and sometimes  throw exception" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix  bugs with connection few clients and sometimes  throw exception" />
+    <MESSAGE value="problem with pool threads" />
+    <option name="LAST_COMMIT_MESSAGE" value="problem with pool threads" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
