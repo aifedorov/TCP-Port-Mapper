@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Запуск прокси сервера, для каждого порта на локальной машине отдельный поток
+ * Запуск прокси сервера
  */
 public class Main {
 
@@ -44,17 +44,15 @@ public class Main {
         }
 
         final List<ProxyConfig> configs = ConfigParser.parse(propertiesProxy);
-        for (final ProxyConfig config : configs){
-            try {
-                new Thread(new Worker(config)).start();
-                LOGGER.log(Level.INFO, "Сервер успешно запущен на порте: " + config.getLocalPort());
+        final int cores = Runtime.getRuntime().availableProcessors();
+        final int workerCount = Math.max(cores / configs.size(), 1);
 
-            } catch (IOException exception) {
-                if (LOGGER.isLoggable(Level.SEVERE)){
-                    LOGGER.log(Level.SEVERE, "Ошибка при запуске сервера!", exception);
-                    System.exit(1);
-                }
-            }
+        if (LOGGER.isLoggable(Level.INFO))
+            LOGGER.info("Сервер может использовать " + workerCount + " потоков для соединения");
+
+        for (final ProxyConfig config : configs){
+                config.setWorkerCount(workerCount);
+                new Server(config).start();
         }
       }
     }

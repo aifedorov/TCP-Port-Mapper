@@ -5,9 +5,11 @@ package TCPProxy;
  */
 
 public class ProxyConfig {
+
     private final int localPort;
     private final String remoteHost;
     private final int remotePort;
+    private int workerCount;
 
     public ProxyConfig(int localPort, String remoteHost, int remotePort) {
         this.localPort = localPort;
@@ -25,6 +27,14 @@ public class ProxyConfig {
 
     public String getRemoteHost() {
         return remoteHost;
+    }
+
+    public int getWorkerCount() {
+        return workerCount;
+    }
+
+    public void setWorkerCount(int workerCount) {
+        this.workerCount = workerCount;
     }
 
 }
