@@ -1,86 +1,65 @@
 package TCPProxy;
 
-import java.io.IOException;
-import java.nio.channels.*;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Воркер создает сокет на локальной машине по указанному порту и ожидает подключение клиента
- * Еще в нем находиться селектор, управляющий каналами сервера и клиента
+ * Created by Александр on 21.06.14.
  */
-
 public class Worker extends Thread {
 
     private final static Logger LOGGER = Logger.getAnonymousLogger();
 
-    private ProxyConfig config;
-    private Connector connector;
-    private Acceptor acceptor;
+    private String workerId;
+    private Runnable task;
+    // Необходима ссылка на пул нитей в котором существует нить, чтобы
+    // нить могла добавить себя в пул нитей по завершению работы.
+    private ThreadPool threadpool;
 
-
-    public Worker(ProxyConfig config, Acceptor acceptor){
-        this.config = config;
-        this.acceptor = acceptor;
+    public Worker(String id, ThreadPool pool) {
+        this.workerId = id;
+        this.threadpool = pool;
+        start();
     }
 
-    @Override
+    // ThreadPool, когда ставит в расписание задачу, использует этот метод
+    // для делегирования задачи Worker-нити. Кроме того для установки
+    // задачи (типа Runnable) он также переключает ожидающий метод
+    // run() на начало выполнения задачи.
+    public void setTask(Runnable task) {
+        this.task = task;
+        synchronized (this) {
+            notify();
+        }
+    }
+
     public void run() {
-
-        Selector selector = null;
-
-            try {
-
-                selector = Selector.open();
-
-                /**
-                 * Регистрируем селектор на прослушку событий подключения к локальной машине
-                 * После передаем управление воркерам - каждый клинт работает со своим воркером
-                */
-               this.acceptor.register(selector);
-
-               while (!Thread.interrupted()) {
-
-                   selector.select();
-                   Iterator selectedKeys = selector.selectedKeys().iterator();
-
-                   while (selectedKeys.hasNext()) {
-                       SelectionKey key = (SelectionKey) selectedKeys.next();
-                       selectedKeys.remove();
-
-                        if (key.isValid() && key.isAcceptable()) {
-
-                            //при подключении клиента создаем коннектор для обмена данными
-                            SocketChannel clientChannel = this.acceptor.process(key);
-
-                            //создаем конектор на удаленный хост
-                            this.connector = new Connector(clientChannel, config);
-
-                            //определяем для него селектор
-                            this.connector.register(selector);
+        try {
+            while (!threadpool.isStopped()) {
+                synchronized (this) {
+                    if (task != null) {
+                        try {
+                            // Запускаем задачу
+                            task.run();
                         }
-
-                        if (key.isValid() && key.isReadable() || key.isValid() && key.isWritable())
-                            this.connector.process(key);
+                        catch (Exception exception) {
+                            if (LOGGER.isLoggable(Level.SEVERE))
+                                LOGGER.log(Level.SEVERE, "Ошибка в потоке " + workerId + "при выполнении задачи!", exception);
                         }
-
-                }
-
-            } catch (IOException exception) {
-                if (LOGGER.isLoggable(Level.SEVERE))
-                    LOGGER.log(Level.SEVERE, "Ошибка в селекторе, работа потока была остановлена!", exception);
-
-            }finally {
-                if (selector != null) {
-                    try {
-                        selector.close();
-                    } catch (IOException exception) {
-                        if (LOGGER.isLoggable(Level.WARNING))
-                            LOGGER.log(Level.WARNING, "Не удалось корректно завершить работу селектора.", exception);
+                        // Возвращает себя в пул нитей
+                        threadpool.putWorker(this);
                     }
+                    wait();
                 }
             }
-          }
+            LOGGER.info(this + " остановлен");
+        }
+        catch (InterruptedException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
 
+    public String toString() {
+        return "Поток : " + workerId;
+    }
 }

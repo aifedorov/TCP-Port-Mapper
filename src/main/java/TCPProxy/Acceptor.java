@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by Александр on 19.06.14.
+ * Слушает порт, указанный в кофигурационном файле
  */
 public class Acceptor {
 
@@ -20,7 +20,7 @@ public class Acceptor {
         this.config = config;
     }
 
-    public void initClient() {
+    public void init() {
 
         try {
 

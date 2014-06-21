@@ -18,8 +18,9 @@ public class Connector {
 
     private final ProxyBuffer clientBuffer = new ProxyBuffer();
     private final ProxyBuffer serverBuffer = new ProxyBuffer();
-    private final SocketChannel clientChannel;
+    private boolean closeConnection = false;
 
+    private final SocketChannel clientChannel;
     private Selector selector;
     private SocketChannel serverChannel;
     private ProxyConfig config;
@@ -100,11 +101,13 @@ public class Connector {
 
             closeChannel(this.clientChannel);
             closeChannel(this.serverChannel);
+            closeConnection = true;
 
         } catch (IOException exception) {
 
             closeChannel(this.clientChannel);
             closeChannel(this.serverChannel);
+            closeConnection = true;
 
             if (LOGGER.isLoggable(Level.WARNING))
                 LOGGER.log(Level.WARNING, "Ошибка при обработке ключей.", exception);
@@ -121,4 +124,6 @@ public class Connector {
             }
         }
     }
+
+    public boolean isCloseConnection() { return closeConnection; }
 }
